@@ -1,0 +1,53 @@
+-- In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
+
+-- How many orders were placed in January?
+SELECT COUNT(orderID)
+FROM JanSales
+WHERE length(orderid) = 6 
+AND orderid <> 'Order ID';
+
+-- How many of those orders were for an iPhone?
+SELECT COUNT(orderID)
+FROM JanSales
+WHERE Product = 'iPhone'
+AND LENGTH(orderID) = 6
+AND orderID <> 'Order ID';
+
+-- Select the customer account numbers for all the orders that were placed in February.
+SELECT DISTINCT(c.acctnum)
+FROM FebSales AS fb
+JOIN customers AS c
+ON fb.orderID = c.order_id
+WHERE LENGTH(fb.orderID) = 6
+AND fb.orderID <> 'Order ID';
+
+-- Which product was the cheapest one sold in January, and what was the price?
+SELECT DISTINCT(Product), price
+FROM JanSales
+ORDER BY price
+LIMIT 1;
+
+-- What is the total revenue for each product sold in January?
+SELECT DISTINCT(Product), 
+ROUND(SUM(Quantity) * price) AS total_revenue
+FROM JanSales
+GROUP BY Product
+ORDER BY total_revenue;
+
+-- Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+SELECT Product, 
+SUM(Quantity),
+SUM(Quantity) * price AS total_revenue
+FROM FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY Product;
+
+-- How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+SELECT COUNT(DISTINCT(c.acctnum)),  
+ROUND(AVG(fb.Quantity * fb.price))
+FROM FebSales AS fb
+JOIN customers AS c
+ON fb.orderID = c.order_id
+WHERE fb.Product > 2
+AND length(orderid) = 6
+AND orderid <> 'Order ID';
