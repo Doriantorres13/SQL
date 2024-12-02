@@ -1,0 +1,131 @@
+-- This project utilizes the following Digital Media Store Database:
+
+-- Which artists have generated the highest total sales? List the artist name and their total sales amount.
+SELECT artists.Name, 
+ROUND(SUM(invoice_items.UnitPrice * invoice_items.Quantity)) AS total_sales
+FROM artists 
+LEFT JOIN albums 
+ON artists.ArtistID = albums.ArtistId
+LEFT JOIN tracks 
+ON albums.AlbumId = tracks.AlbumId
+LEFT JOIN invoice_items
+ON invoice_items.TrackId = tracks.TrackId
+GROUP BY artists.Name
+HAVING total_sales <> 'NULL'
+ORDER BY total_sales DESC;
+
+-- Who are the top 5 customers based on total spending? Display their names, email addresses, and total amount spent.
+SELECT c.FirstName || ' ' || c.LastName AS customer_name, 
+c.Email, 
+SUM(i.Total) AS total_spending
+FROM customers AS c
+JOIN Invoices AS i 
+ON c.CustomerId = i.CustomerId
+GROUP BY c.CustomerId
+ORDER BY total_spending DESC
+LIMIT 5;
+
+-- What are the top 5 most popular music genres based on the number of tracks sold.
+SELECT g.name, SUM(ii.Quantity) AS tracks_sold
+FROM genres AS g
+LEFT JOIN tracks AS t
+ON g.GenreID = t.GenreID
+LEFT JOIN invoice_items AS ii
+ON t.TrackID = ii.TrackID
+GROUP BY g.name
+ORDER BY tracks_sold DESC
+LIMIT 5;
+
+-- How do total sales vary by month? Show the month, year, and total sales amount for each month in chronological order.
+SELECT 
+STRFTIME('%Y', i.InvoiceDate) AS Year,
+STRFTIME('%m', i.InvoiceDate) AS Month,
+SUM(ii.UnitPrice * ii.Quantity) AS TotalSales
+FROM invoices AS i
+JOIN invoice_items ii
+ON i.InvoiceId = ii.InvoiceId
+GROUP BY Year, Month
+ORDER BY Year, Month;
+
+-- Show Customers (their full names, customer ID, and country) who are not in the US. 
+SELECT FirstName || ' ' || LastName AS full_name, CustomerID, Country
+FROM customers
+WHERE Country <> 'USA';
+
+-- Find the Invoices of customers who are from Brazil. 
+-- The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.
+SELECT 
+c.FirstName || ' ' || c.LastName AS full_name,
+i.InvoiceID, 
+i.BillingCountry
+FROM customers AS c
+LEFT JOIN invoices AS i
+ON c.CustomerID = i.CustomerID
+WHERE c.Country = 'Brazil';
+
+-- Provide a query that shows the invoices associated with each sales agent. 
+-- The resulting table should include the Sales Agent's full name.
+SELECT 
+e.FirstName || ' ' || e.LastName AS sales_support_agent,
+i.InvoiceID
+FROM employees AS e
+JOIN customers AS c
+ON e.EmployeeID = c.SupportRepID
+JOIN invoices AS i
+ON c.CustomerID = i.CustomerID;
+
+-- Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+SELECT 
+c.FirstName || ' ' || c.LastName AS customer_name,
+SUM(i.Total) As total,
+i.BillingCountry,
+e.FirstName || ' ' || e.LastName AS sales_agent
+FROM employees AS e
+JOIN customers AS c
+ON e.EmployeeiD = c.SupportRepID
+JOIN invoices AS i
+ON c.CustomerID = i.CustomerID
+GROUP BY customer_name, i.BillingCountry, sales_agent;
+
+-- How many Invoices were there in 2009?
+SELECT COUNT(*) AS total_invoices
+FROM invoices
+WHERE STRFTIME('%Y', InvoiceDate) = '2009';
+
+-- What are the total sales for 2009?
+SELECT 
+ROUND(SUM(Total)) AS total_sales
+FROM invoices 
+WHERE STRFTIME('%Y', InvoiceDate) = '2009';
+
+-- Write a query that includes the purchased track name with each invoice line ID
+SELECT t.Name, ii.InvoiceLineID
+FROM tracks AS t
+JOIN invoice_items AS ii
+ON t.TrackID = ii.TrackID
+ORDER BY ii.InvoiceLineID;
+
+-- Write a query that includes the purchased track name AND artist name with each invoice line ID.
+SELECT 
+ii.InvoiceLineId ,
+ar.Name AS artist_name, 
+t.Name AS track_name 
+FROM artists AS ar
+JOIN albums AS alb
+ON ar.ArtistID = alb.ArtistID
+JOIN tracks AS t
+ON alb.AlbumID = t.AlbumID
+JOIN invoice_items AS ii
+ON t.TrackID = ii.TrackID
+ORDER BY ii.InvoiceLineId;
+
+-- Show the total sales made by each sales agent
+SELECT 
+e.FirstName || ' ' || e.LastName AS sales_agent,
+SUM(i.total) AS total_sales
+FROM employees AS e
+JOIN customers AS c
+ON e.EmployeeID = c.SupportRepID
+JOIN invoices As i
+ON c.CustomerID = i.CustomerID
+GROUP BY sales_agent;
