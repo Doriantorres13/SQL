@@ -1,5 +1,4 @@
-# SQL
-SQL Portfolio
+# SQL Portfolio
 
 Welcome to my SQL Portfolio! This repository showcases various SQL projects demonstrating my ability to work with databases, analyze data, and generate insights from diverse datasets.
 
