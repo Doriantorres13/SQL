@@ -7,15 +7,15 @@ Projects Included:
 1. Customer & Order Analytics:
 - Analyzed customer data and order patterns to identify trends and improve business decisions.
 - Techniques: Aggregation, filtering, and joins to explore customer segmentation and purchase behavior.
-- 
+  
 2. Digital Media Store Database:
 - Explored a database of a fictional digital media store to analyze sales, product popularity, and customer preferences.
 - Focus: Revenue generation, user engagement, and inventory performance.
-- 
+  
 3. Fortune 500 Analysis:
 - Analyzed Fortune 500 companies to uncover trends in rankings, revenues, and industries over time.
 - Key metrics: Revenue growth, sector-wise performance, and historical insights.
-- 
+  
 4. Netflix Database Analysis:
 - Worked on Netflix's database to analyze content trends, genre popularity, and user behavior.
 - Objectives: Understand streaming preferences and guide content strategies.
