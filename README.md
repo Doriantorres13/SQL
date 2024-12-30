@@ -29,6 +29,6 @@ Projects Included:
 - Deliverables: Profit margin analysis, top-performing categories, and operational efficiency.
 
 Features:
-- SQL Techniques: Joins, subqueries, window functions, CTEs, and aggregations.
+- SQL Techniques: Joins, subqueries, CTEs, and aggregations.
 - Databases: Simulated transactional and analytical datasets.
 - Focus Areas: Business insights, customer behavior analysis, and operational metrics.
